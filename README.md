@@ -14,9 +14,11 @@ pip install PIL
 File ```neural_style_transfer.py``` contails imports for the library and the function to convert the supplied image to art image. 
 
 ```python
-img = style_trans("models/instance_norm/starry_night.t7", "images/Rich.jpg")
-cv2.imshow("Output", img)
-cv2.waitKey(0)
+
+pil_image = Image.open("images/Feeld.jpg") # open image using PIL
+img = style_trans("models/instance_norm/mosaic.t7", pil_image)
+display(im)
+
 ```
 
 [Source](https://www.pyimagesearch.com/2018/08/27/neural-style-transfer-with-opencv/)
