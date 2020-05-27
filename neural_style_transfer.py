@@ -1,8 +1,8 @@
 # import the necessary packages
-import argparse
 import imutils
-import time
+import numpy as np
 import cv2
+from PIL import Image
 
 def style_trans( model, pil_image ):
     # load the neural style transfer model from disk
@@ -30,24 +30,19 @@ def style_trans( model, pil_image ):
     # end = time.time()
 
     # reshape the output tensor, add back in the mean subtraction, and
-    # then swap the channel ordering
     output = output.reshape((3, output.shape[2], output.shape[3]))
     output[0] += 103.939
     output[1] += 116.779
     output[2] += 123.680
     output /= 255.0
     output = output.transpose(1, 2, 0)
-
-    output = output[:,:,::-1]
-    # show information on how long inference took
-    # print("[INFO] neural style transfer took {:.4f} seconds".format(end - start))
-
-    # show the images
-    # cv2.imshow("Input", image)
-    # cv2.imshow("Output", output)
-    # cv2.waitKey(0)
     
+    # then swap the channel ordering
+    output = output[:,:,::-1]
+
+    # Clip the range b/w 0 and 255 to prevent saturation
     output = np.clip(output * 255, 0, 255) # proper [0..255] range
+    # Steps to convert array to PIL image format
     output = output.astype(np.uint8) # safe conversion
     output = Image.fromarray(output)
 
