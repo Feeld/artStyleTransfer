@@ -8,15 +8,15 @@ def style_trans( model, pil_image ):
     # load the neural style transfer model from disk
     net = cv2.dnn.readNetFromTorch(model)
     
+    # load the input image, resize it to have a width of 600 pixels, and
+    # then grab the image dimensions
+    
     # use numpy to convert the pil_image into a numpy array
     numpy_image=np.array(pil_image)  
 
     # convert to a openCV2 image, notice the COLOR_RGB2BGR which means that 
     # the color is converted from RGB to BGR format
     opencv_image=cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)
-    
-    # resize the input image to have a width of 600 pixels, and
-    # then grab the image dimensions
     
     image = imutils.resize(opencv_image, width=600)
     (h, w) = image.shape[:2]
@@ -38,6 +38,7 @@ def style_trans( model, pil_image ):
     output /= 255.0
     output = output.transpose(1, 2, 0)
 
+    output = output[:,:,::-1]
     # show information on how long inference took
     # print("[INFO] neural style transfer took {:.4f} seconds".format(end - start))
 
@@ -45,5 +46,9 @@ def style_trans( model, pil_image ):
     # cv2.imshow("Input", image)
     # cv2.imshow("Output", output)
     # cv2.waitKey(0)
+    
+    output = np.clip(output * 255, 0, 255) # proper [0..255] range
+    output = output.astype(np.uint8) # safe conversion
+    output = Image.fromarray(output)
 
     return output
