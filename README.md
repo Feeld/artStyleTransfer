@@ -4,7 +4,9 @@ Using pretrained art style transfer image nets, make your regular photos artisti
 ## Installation 
 ```bash
 pip install imutils
-pip install cv2
+pip install opencv-python
+pip install numpy
+pip install PIL
 ```
 
 ## Usage
