@@ -4,14 +4,21 @@ import imutils
 import time
 import cv2
 
-def style_trans( model, image1 ):
+def style_trans( model, pil_image ):
     # load the neural style transfer model from disk
     net = cv2.dnn.readNetFromTorch(model)
     
-    # load the input image, resize it to have a width of 600 pixels, and
+    # use numpy to convert the pil_image into a numpy array
+    numpy_image=np.array(pil_image)  
+
+    # convert to a openCV2 image, notice the COLOR_RGB2BGR which means that 
+    # the color is converted from RGB to BGR format
+    opencv_image=cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)
+    
+    # resize the input image to have a width of 600 pixels, and
     # then grab the image dimensions
-    image = cv2.imread(image1)
-    image = imutils.resize(image, width=600)
+    
+    image = imutils.resize(opencv_image, width=600)
     (h, w) = image.shape[:2]
     
     # construct a blob from the image, set the input, and then perform a
